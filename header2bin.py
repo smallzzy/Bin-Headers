@@ -51,7 +51,7 @@ def main(args):
 
     # Read the file
     try:
-        with open(infile, 'rb') as f:
+        with open(infile, 'r') as f:
             indata = f.read()
     except Exception as e:
         print('Failed to read \'%s\': %s' % (infile, e))
@@ -61,7 +61,7 @@ def main(args):
     # Remove all newlines from the file so we can match as if it was one string
     indata = re.sub('[\r\n]+', '', indata)
     # Match the start and end pulling out the part with the hex numbers
-    match = re.match('^unsigned char.*\[\].*=.*{(.*)};.*unsigned int.*$', indata)
+    match = re.search('unsigned char.*\[\].*=.*{(.*)};', indata)
     if not match:
         print('File does not have proper format')
         return 3
@@ -96,7 +96,7 @@ def main(args):
         print('Failed to write \'%s\': %s' % (outfile, e))
         return 3
 
-    return 0;
+    return 0
 
 if __name__ == '__main__':
     sys.exit(main(sys.argv))
